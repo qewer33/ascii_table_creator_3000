@@ -99,6 +99,7 @@ class InteractiveSession
       "set_title" => method(:cmd_set_title),
       "set_headings" => method(:cmd_set_headings),
       "set_border_style" => method(:cmd_set_border_style),
+      "set_all_separators" => method(:cmd_set_all_separators),
     }
     @commands_help = { # list of commands and their corresponding help messages
       "help" => ["", "Displays this help message"],
@@ -111,6 +112,7 @@ class InteractiveSession
       "set_title" => ["<title>", "Sets the title of the table. If no title is specified, the title is disabled"],
       "set_headings" => ["<headings>", "Sets the headings of the table. If no headings are specified, the headings are disabled"],
       "set_border_style" => ["<style>", "Sets the border style of the table. The style can be one of the following:  ascii, markdown, unicode, unicode_round, unicode_thick_edge"],
+      "set_all_separators" => ["<true/false>", "Enables/disables separator for all table elements"],
     }
   end
 
@@ -261,25 +263,45 @@ class InteractiveSession
   def cmd_set_border_style(args)
     args = args.split(" ")
 
-    if args[0] == "ascii"
+    case args[0]
+    when "ascii"
       @th.set_style_key(:border, :ascii)
-    elsif args[0] == "markdown"
+      @th.update_table
+    when "markdown"
       @th.set_style_key(:border, :markdown)
-    elsif args[0] == "unicode"
+      @th.update_table
+    when "unicode"
       @th.set_style_key(:border, :unicode)
-    elsif args[0] == "unicode_round"
+      @th.update_table
+    when "unicode_round"
       @th.set_style_key(:border, :unicode_round)
-    elsif args[0] == "unicode_thick_edge"
+      @th.update_table
+    when "unicode_thick_edge"
       @th.set_style_key(:border, :unicode_thick_edge)
+      @th.update_table
     else
-      puts "The border type can only be one of the following:".red
+      puts "The border_style value can only be one of the following:".red
       puts "  ascii".yellow
       puts "  markdown".yellow
       puts "  unicode".yellow
       puts "  unicode_round".yellow
       puts "  unicode_thick_edge".yellow
     end
-    @th.update_table
+  end
+
+  def cmd_set_all_separators(args)
+    args = args.split(" ")
+
+    case args[0]
+    when "true"
+      @th.set_style_key(:all_separators, true)
+      @th.update_table
+    when "false"
+      @th.set_style_key(:all_separators, false)
+      @th.update_table
+    else
+      puts "The all_separators value can only be true or false".red
+    end
   end
 end
 
