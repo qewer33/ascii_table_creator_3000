@@ -162,7 +162,7 @@ class InteractiveSession
   end
 
   def cmd_table(args)
-    puts @th.table
+    @th.update_table
   end
 
   def cmd_clear(args)
@@ -232,6 +232,7 @@ class InteractiveSession
   def cmd_set_title(args)
     if args.length == 0
       @th.set_title("")
+      @th.update_table
     else
       @th.set_title(args)
       @th.update_table
@@ -254,6 +255,7 @@ class InteractiveSession
 
     if args.length == 0
       @th.set_headings("")
+      @th.update_table
     else
       @th.set_headings(args[0..-1])
       @th.update_table
